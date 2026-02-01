@@ -21,20 +21,21 @@ const contactSchema = z.object({
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
 
+import { generateEmail, EMAIL_TYPES } from './email-templates/index.js';
+
 router.post('/contact', contactLimiter, async (req, res) => {
   try {
     const validatedData = contactSchema.parse(req.body);
     const { firstName, lastName, email, subject, message } = validatedData;
 
-    // Email content
-    const emailHtml = `
-      <h2>New Contact Form Submission Ultimate Qr Code</h2>
-      <p><strong>Name:</strong> ${firstName} ${lastName}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Subject:</strong> ${subject}</p>
-      <p><strong>Message:</strong></p>
-      <p>${message}</p>
-    `;
+    // Generate professional email content using new system
+    const emailHtml = generateEmail(EMAIL_TYPES.CONTACT_FORM, { 
+      firstName, 
+      lastName, 
+      email, 
+      subject, 
+      message 
+    });
 
     // Send email to the site owner (configured in env)
     await sendEmail({
