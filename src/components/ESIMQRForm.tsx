@@ -20,20 +20,20 @@ const ESIMQRForm: React.FC<ESIMQRFormProps> = ({ onValueChange, onFormDataChange
   const [phoneNumber, setPhoneNumber] = useState('');
   const [operator, setOperator] = useState('');
 
-  useEffect(() => {
-    const generateESIMString = () => {
-      if (!smDpAddress && !activationCode) {
-        return 'LPA:1$example.com$12345$optional-confirmation';
-      }
-      
-      let lpaString = 'LPA:1';
-      if (smDpAddress) lpaString += `$${smDpAddress}`;
-      if (activationCode) lpaString += `$${activationCode}`;
-      if (confirmationCode) lpaString += `$${confirmationCode}`;
-      
-      return lpaString;
-    };
+  const generateESIMString = React.useCallback(() => {
+    if (!smDpAddress && !activationCode) {
+      return 'LPA:1$example.com$12345$optional-confirmation';
+    }
+    
+    let lpaString = 'LPA:1';
+    if (smDpAddress) lpaString += `$${smDpAddress}`;
+    if (activationCode) lpaString += `$${activationCode}`;
+    if (confirmationCode) lpaString += `$${confirmationCode}`;
+    
+    return lpaString;
+  }, [smDpAddress, activationCode, confirmationCode]);
 
+  useEffect(() => {
     const esimString = generateESIMString();
     onValueChange(esimString);
     
@@ -46,7 +46,7 @@ const ESIMQRForm: React.FC<ESIMQRFormProps> = ({ onValueChange, onFormDataChange
         operator: operator || undefined,
       });
     }
-  }, [smDpAddress, activationCode, confirmationCode, pinCode, pukCode, phoneNumber, operator, onValueChange, onFormDataChange]);
+  }, [generateESIMString, pukCode, pinCode, phoneNumber, operator, onValueChange, onFormDataChange]);
 
   return (
     <div className="space-y-6">

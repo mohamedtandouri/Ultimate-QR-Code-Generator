@@ -203,26 +203,7 @@ const QRCodeGenerator = () => {
         <div className="flex flex-col items-center">
           <h3 className="text-xl font-semibold mb-6">QR Code Preview</h3>
           <div className="mb-6">
-            <div ref={qrCodeRef} className="relative" data-qr-container>
-              {cornerRadius > 0 ? (
-                <div className="relative" style={{ borderRadius: `${cornerRadius}px`, overflow: 'hidden' }}>
-                  <QRCodeSVG 
-                    value={qrValue} 
-                    size={qrSize} 
-                    level={errorLevel as "L" | "M" | "Q" | "H"} 
-                    includeMargin={true} 
-                    bgColor={bgColor} 
-                    fgColor={fgColor} 
-                    imageSettings={logo ? {
-                      src: logo,
-                      excavate: true,
-                      width: qrSize * 0.2,
-                      height: qrSize * 0.2
-                    } : undefined} 
-                    className="px-0 mx-[15px] my-[15px]" 
-                  />
-                </div>
-              ) : (
+            <div ref={qrCodeRef} className="relative transition-all duration-300" style={{ borderRadius: `${cornerRadius}px`, overflow: 'hidden' }} data-qr-container>
                 <QRCodeCanvas 
                   id="qr-code" 
                   value={qrValue} 
@@ -239,7 +220,6 @@ const QRCodeGenerator = () => {
                   } : undefined} 
                   className="px-0 mx-[15px] my-[15px]" 
                 />
-              )}
             </div>
           </div>
           
